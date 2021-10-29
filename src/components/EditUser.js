@@ -20,7 +20,7 @@ class EditUser extends Component {
   render() {
     return (
       <UserContext.Consumer>
-        {({ handleSaveEdit, handleInputChange, newUser }) => (
+        {({ handleSaveEdit, handleInputChange, newUser, handleResetInput }) => (
           <div>
             <form
               onSubmit={handleSaveEdit(this.state.value, this.props.history)}
@@ -41,7 +41,7 @@ class EditUser extends Component {
                 <button type="submit" className="btn__submit">
                   Save
                 </button>
-                <Link to="/" className="btn__cancel">
+                <Link to="/" className="btn__cancel" onClick={handleResetInput}>
                   Cancel
                 </Link>
               </div>

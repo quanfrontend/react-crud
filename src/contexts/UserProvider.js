@@ -16,6 +16,7 @@ export default class UserProvider extends Component {
     this.handleDeleteUser = this.handleDeleteUser.bind(this);
     this.handleEditUser = this.handleEditUser.bind(this);
     this.handleSaveEdit = this.handleSaveEdit.bind(this);
+    this.handleResetInput = this.handleResetInput.bind(this);
   }
 
   async componentDidMount() {
@@ -31,24 +32,26 @@ export default class UserProvider extends Component {
     });
   }
 
+  handleResetInput() {
+    this.setState({
+      newUser: "",
+    });
+  }
+
   handleAddUser(history) {
     return async (e) => {
       e.preventDefault();
       const response = await axios.post(url, { name: this.state.newUser });
-      console.log(response.data);
       this.setState({
         newUser: "",
         users: [response.data, ...this.state.users],
       });
       history.push("/");
-      console.log(this.state.users);
     };
   }
 
   handleDeleteUser(user) {
     return async () => {
-      console.log(user);
-      console.log(this.state.users);
       await axios.delete(`${url}/${user.id}`);
       const { users } = this.state;
       const value = users.indexOf(user);
@@ -72,7 +75,6 @@ export default class UserProvider extends Component {
       e.preventDefault();
       const id = this.state.users.findIndex((user) => user.name === value);
       const a = this.state.users[id].id;
-      console.log(a);
       if (id >= 0) {
         await axios.put(`${url}/${a}`, { name: this.state.newUser });
         this.state.users.splice(id, 1, {
@@ -85,7 +87,6 @@ export default class UserProvider extends Component {
         });
       }
       history.push("/");
-      console.log(this.state.users);
     };
   }
 
@@ -100,6 +101,7 @@ export default class UserProvider extends Component {
           handleDeleteUser: this.handleDeleteUser,
           handleEditUser: this.handleEditUser,
           handleSaveEdit: this.handleSaveEdit,
+          handleResetInput: this.handleResetInput,
         }}
       >
         {this.props.children}

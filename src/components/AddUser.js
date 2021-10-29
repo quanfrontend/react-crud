@@ -8,7 +8,12 @@ class AddUser extends Component {
     return (
       <div>
         <UserContext.Consumer>
-          {({ handleAddUser, newUser, handleInputChange }) => (
+          {({
+            handleAddUser,
+            newUser,
+            handleInputChange,
+            handleResetInput,
+          }) => (
             <form onSubmit={handleAddUser(this.props.history)}>
               <div className="form__group">
                 <label htmlFor="userName">Name</label>
@@ -25,7 +30,7 @@ class AddUser extends Component {
                 <button type="submit" className="btn__submit">
                   Submit
                 </button>
-                <Link to="/" className="btn__cancel">
+                <Link to="/" className="btn__cancel" onClick={handleResetInput}>
                   Cancel
                 </Link>
               </div>
