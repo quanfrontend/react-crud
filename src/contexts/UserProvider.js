@@ -19,9 +19,9 @@ export default class UserProvider extends Component {
   }
 
   async componentDidMount() {
-    const data = await axios.get(url);
+    const response = await axios.get(url);
     this.setState({
-      users: data.data,
+      users: response.data,
     });
   }
 
@@ -34,20 +34,24 @@ export default class UserProvider extends Component {
   handleAddUser(history) {
     return async (e) => {
       e.preventDefault();
-      await axios.post(url, { name: this.state.newUser });
+      const response = await axios.post(url, { name: this.state.newUser });
+      console.log(response.data);
       this.setState({
         newUser: "",
-        users: [{ name: this.state.newUser }, ...this.state.users],
+        users: [response.data, ...this.state.users],
       });
       history.push("/");
+      console.log(this.state.users);
     };
   }
 
-  handleDeleteUser(id) {
+  handleDeleteUser(user) {
     return async () => {
-      await axios.delete(`${url}/${id}`);
+      console.log(user);
+      console.log(this.state.users);
+      await axios.delete(`${url}/${user.id}`);
       const { users } = this.state;
-      const value = users.findIndex((user) => user.id === id);
+      const value = users.indexOf(user);
       users.splice(value, 1);
       this.setState({
         users: [...users],
@@ -68,15 +72,20 @@ export default class UserProvider extends Component {
       e.preventDefault();
       const id = this.state.users.findIndex((user) => user.name === value);
       const a = this.state.users[id].id;
-      await axios.put(`${url}/${a}`, { name: this.state.newUser });
+      console.log(a);
       if (id >= 0) {
-        this.state.users.splice(id, 1, { name: this.state.newUser });
+        await axios.put(`${url}/${a}`, { name: this.state.newUser });
+        this.state.users.splice(id, 1, {
+          ...this.state.users[id],
+          name: this.state.newUser,
+        });
         this.setState({
           newUser: "",
           users: [...this.state.users],
         });
       }
       history.push("/");
+      console.log(this.state.users);
     };
   }
 

@@ -4,7 +4,7 @@ import UserContext from "../contexts/UserContext";
 
 export default class UserList extends Component {
   render() {
-    const { user, id } = this.props;
+    const { user } = this.props;
     return (
       <UserContext.Consumer>
         {({ handleDeleteUser, handleEditUser }) => (
@@ -14,14 +14,14 @@ export default class UserList extends Component {
               <div className="actions">
                 <Link
                   className="btn__edit"
-                  to={`/edit/${id}`}
+                  to={`/edit/${user.id}`}
                   onClick={handleEditUser(user)}
                 >
                   Edit
                 </Link>
                 <button
                   className="btn__delete"
-                  onClick={handleDeleteUser(user.id)}
+                  onClick={handleDeleteUser(user)}
                 >
                   Delete
                 </button>
