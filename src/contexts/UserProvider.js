@@ -41,24 +41,32 @@ export default class UserProvider extends Component {
   handleAddUser(history) {
     return async (e) => {
       e.preventDefault();
-      const response = await axios.post(url, { name: this.state.newUser });
-      this.setState({
-        newUser: "",
-        users: [response.data, ...this.state.users],
-      });
-      history.push("/");
+      try {
+        const response = await axios.post(url, { name: this.state.newUser });
+        this.setState({
+          newUser: "",
+          users: [response.data, ...this.state.users],
+        });
+        history.push("/");
+      } catch (error) {
+        console.log(error);
+      }
     };
   }
 
   handleDeleteUser(user) {
     return async () => {
-      await axios.delete(`${url}/${user.id}`);
-      const { users } = this.state;
-      const value = users.indexOf(user);
-      users.splice(value, 1);
-      this.setState({
-        users: [...users],
-      });
+      try {
+        await axios.delete(`${url}/${user.id}`);
+        const { users } = this.state;
+        const value = users.indexOf(user);
+        users.splice(value, 1);
+        this.setState({
+          users: [...users],
+        });
+      } catch (error) {
+        console.log(error);
+      }
     };
   }
 
@@ -73,20 +81,24 @@ export default class UserProvider extends Component {
   handleSaveEdit(value, history) {
     return async (e) => {
       e.preventDefault();
-      const id = this.state.users.findIndex((user) => user.name === value);
-      const a = this.state.users[id].id;
-      if (id >= 0) {
-        await axios.put(`${url}/${a}`, { name: this.state.newUser });
-        this.state.users.splice(id, 1, {
-          ...this.state.users[id],
-          name: this.state.newUser,
-        });
-        this.setState({
-          newUser: "",
-          users: [...this.state.users],
-        });
+      try {
+        const id = this.state.users.findIndex((user) => user.name === value);
+        const a = this.state.users[id].id;
+        if (id >= 0) {
+          await axios.put(`${url}/${a}`, { name: this.state.newUser });
+          this.state.users.splice(id, 1, {
+            ...this.state.users[id],
+            name: this.state.newUser,
+          });
+          this.setState({
+            newUser: "",
+            users: [...this.state.users],
+          });
+        }
+        history.push("/");
+      } catch (error) {
+        console.log(error);
       }
-      history.push("/");
     };
   }
 
