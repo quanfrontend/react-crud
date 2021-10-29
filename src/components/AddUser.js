@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import UserContext from "../contexts/UserContext";
+import { withRouter } from "react-router";
 
-export default class AddUser extends Component {
+class AddUser extends Component {
   render() {
     return (
       <div>
         <UserContext.Consumer>
           {({ handleAddUser, newUser, handleInputChange }) => (
-            <form onSubmit={handleAddUser}>
+            <form onSubmit={handleAddUser(this.props.history)}>
               <div className="form__group">
                 <label htmlFor="userName">Name</label>
                 <input
@@ -35,3 +36,5 @@ export default class AddUser extends Component {
     );
   }
 }
+
+export default withRouter(AddUser);

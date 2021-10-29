@@ -10,7 +10,9 @@ export default class Home extends Component {
         <Heading />
         <UserContext.Consumer>
           {({ users }) =>
-            users.map((user, index) => <UserList user={user} key={index} />)
+            users.map((user, index) => (
+              <UserList user={user} id={index} key={index} />
+            ))
           }
         </UserContext.Consumer>
       </div>
